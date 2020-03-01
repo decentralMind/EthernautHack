@@ -4,7 +4,8 @@ contract FallBackHack {
     
     /**
      * @title FallBackHack
-     * @dev solution to ethernaut 1.FallBack contract.
+     /* @dev This will successfully hack the Fallback contract but won't be able the pass the test. 
+     * Ethernaut requires PLAYER address to be owner not the deployed smart contract address. 
      * Deposit some ether before executing.
      */
     address _a;
