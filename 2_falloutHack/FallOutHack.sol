@@ -14,5 +14,4 @@ contract FallOutHack {
         (bool success, ) = address(_a).call(payload);
         require(success);
     }
-
 }

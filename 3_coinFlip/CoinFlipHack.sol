@@ -24,7 +24,7 @@ contract CoinFlipHack {
 
     /**
         @dev Repeatedly deploy this method to hack the contract 
-        until consecutive wins is equal 10.
+        until consecutive wins is equal to 10.
      */
     function checkBlock() public returns (bool) {
         if (_getBlockMinusOne() == prevBlock) {

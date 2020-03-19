@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/decentralMind/EthernautHack#readme",
   "dependencies": {
+    "@truffle/hdwallet-provider": "^1.0.32",
     "dotenv": "^8.2.0",
     "install": "^0.13.0",
-    "npm": "^6.14.1"
+    "npm": "^6.14.1",
+    "solc": "^0.6.3"
   }
 }
