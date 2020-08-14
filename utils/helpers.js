@@ -13,7 +13,7 @@ const encodeMethodIdWithParameters = (methodId, paramType, paramValue) => {
     }
 
     if (!paramType.length || !paramValue.length) {
-        throw new Error('Empty parameter provided.')
+        throw new Error('Empty parameter provided.');
     }
 
     if (!Array.isArray(paramType) || !Array.isArray(paramValue)) {
@@ -23,9 +23,9 @@ const encodeMethodIdWithParameters = (methodId, paramType, paramValue) => {
     const encodedId = web3.eth.abi.encodeFunctionSignature(methodId);
     const encodedParam = web3.eth.abi.encodeParameters(paramType, paramValue);
     const finalResult = encodedId + encodedParam.slice(2, encodedParam.length);
-    
+
     return finalResult;
-}
+};
 
 /**
  * @dev reterive given accounts.
@@ -35,10 +35,10 @@ const encodeMethodIdWithParameters = (methodId, paramType, paramValue) => {
 const getAccounts = async function (id) {
     const accounts = await web3.eth.getAccounts();
     return accounts[id];
-}
+};
 
 /**
- * 
+ *
  * @param {String} methodId method to call.
  * @param {String} mainContractAddress receiver address.
  * @param {Array} paramType list of methods to execute e.g.['uint256', 'String].
@@ -76,7 +76,7 @@ const getSignedData = async function (methodId, mainContractAddress, paramType, 
     });
 
     return signedData;
-}
+};
 
 const storageLoop = async (contractAddress, from, to) => {
     if(from > to) {
@@ -85,11 +85,17 @@ const storageLoop = async (contractAddress, from, to) => {
 
     for(i=from; i<to; i++) {
         const data = await web3.eth.getStorageAt(contractAddress, i);
-        console.log(`index: ${i} : ${data}`)
+        console.log(`index: ${i} : ${data}`);
     }
     return true;
-}
+};
 
+/**
+ * @param {String} payload payload data in hex format.
+ * @param {String} contractAddress ethernaut contract address.
+ * @param {String} account deployer address.
+ * @return {Object} receipt of the transaction.
+ */
 const sendTransaction = async (payload, contractAddress, account) => {
     const gasPrice = await web3.eth.getGasPrice();
     return web3.eth.sendTransaction({
@@ -102,11 +108,19 @@ const sendTransaction = async (payload, contractAddress, account) => {
     }).on('transactionHash', function (hash) {
         console.log("txHash", hash);
     });
-}
+};
+
 const valueFromLogs = (receipt, logsName) => {
     const value = receipt['logs'][0][logsName];
     return value;
-}
+};
+
+const checkLength = (data, check) => {
+    if (data.length !== check) {
+        throw new Error(`Length should be ${check}`);
+    }
+    return true;
+};
 
 module.exports = {
     encodeMethodIdWithParameters: encodeMethodIdWithParameters,
@@ -114,7 +128,6 @@ module.exports = {
     getSignedData: getSignedData,
     storageLoop: storageLoop,
     sendTransaction: sendTransaction,
-    valueFromLogs: valueFromLogs
-}
-
-
+    valueFromLogs: valueFromLogs,
+    checkLength: checkLength
+};
