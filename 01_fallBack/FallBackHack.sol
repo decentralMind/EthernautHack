@@ -3,8 +3,8 @@ pragma solidity ^0.5.0;
 contract FallBackHack {
     /**
      * @title FallBackHack
-     * @dev This will successfully hack the Fallback contract but won't be able the pass the test. 
-     * Ethernaut requires PLAYER address to be owner not the deployed smart contract address. 
+     * @dev This will successfully hack the Fallback contract but won't be able the pass the test.
+     * Ethernaut requires PLAYER address to be owner not the deployed smart contract address.
      * Deposit some ether before executing.
      */
     address _a;

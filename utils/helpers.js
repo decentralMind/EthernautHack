@@ -96,12 +96,12 @@ const storageLoop = async (contractAddress, from, to) => {
  * @param {String} account deployer address.
  * @return {Object} receipt of the transaction.
  */
-const sendTransaction = async (payload, contractAddress, account) => {
+const sendTransaction = async (payload, contractAddress, account, value = '') => {
     const gasPrice = await web3.eth.getGasPrice();
     return web3.eth.sendTransaction({
         from: account,
         to: contractAddress,
-        value: '',
+        value: value,
         gas: 8000000,
         gasPrice: gasPrice * 10,
         data: payload

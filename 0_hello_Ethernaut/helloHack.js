@@ -4,9 +4,6 @@ const { getAccounts, checkLength, sendTransaction, valueFromLogs, encodeMethodId
 
 var globalValue = {};
 
-/**
-* @dev Creatre level instance.
-*/
 const createInstance = async () => {
     console.log('Creating instance..');
     const account = await getAccounts(0);
@@ -37,7 +34,6 @@ const submitInstance = async (instanceAddress) => {
   const account = await getAccounts(0);
   return sendTransaction(payload, mainAddress, globalValue.account);
 };
-
 
 createInstance()
   .then((receipt) => {
