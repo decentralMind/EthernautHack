@@ -1,18 +1,31 @@
-const { web3 } = require('../utils/getWeb3');
-const { mainAddress, levelAddresses, deployId, submitId } = require('../utils/contractInfo');
-const { getAccounts, checkLength, sendTransaction, valueFromLogs, encodeMethodIdWithParameters } = require('../utils/helpers');
+const {
+  web3
+} = require('../utils/getWeb3');
+const {
+  mainAddress,
+  levelAddresses,
+  deployId,
+  submitId
+} = require('../utils/contractInfo');
+const {
+  getAccounts,
+  checkLength,
+  sendTransaction,
+  valueFromLogs,
+  encodeMethodIdWithParameters
+} = require('../utils/helpers');
 
 var globalValue = {};
 
 const createInstance = async () => {
-    console.log('Creating instance..');
-    const account = await getAccounts(0);
-    globalValue.account = account;
-    const levelAddress = levelAddresses[0];
-    console.log("deploying....");
-    const payload = deployId + '0'.repeat(24) + levelAddress.slice(2);
-    checkLength(payload, 74);
-    return sendTransaction(payload, mainAddress, account);
+  console.log('Creating instance..');
+  const account = await getAccounts(0);
+  globalValue.account = account;
+  const levelAddress = levelAddresses[0];
+  console.log("deploying....");
+  const payload = deployId + '0'.repeat(24) + levelAddress.slice(2);
+  checkLength(payload, 74);
+  return sendTransaction(payload, mainAddress, account);
 };
 
 const initHack = async (password) => {
@@ -20,9 +33,9 @@ const initHack = async (password) => {
   console.log('Calling authenticate method');
   console.log('instance address inside initHack', globalValue.instanceAddress);
   const payload = encodeMethodIdWithParameters(
-      'authenticate(string)',
-      ['string'],
-      [password]
+    'authenticate(string)',
+    ['string'],
+    [password]
   );
   return sendTransaction(payload, globalValue.instanceAddress, globalValue.account);
 };
@@ -43,9 +56,9 @@ createInstance()
     return initHack('ethernaut0');
   })
   .then(() => {
-  return submitInstance(globalValue.instanceAddress);
-})
-.then((data) => {
-  console.log(data);
-})
-.catch(console.log);
+    return submitInstance(globalValue.instanceAddress);
+  })
+  .then((data) => {
+    console.log(data);
+  })
+  .catch(console.log);
