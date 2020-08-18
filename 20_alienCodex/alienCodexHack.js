@@ -31,7 +31,7 @@ const createInstance = async () => {
     const payload = "0xdfc86b17000000000000000000000000f0d6f7da4ed4ff54761841e497f5afc795f04688";
     checkLength(payload, 74);
     return sendTransaction(payload, mainAddress, account);
-}
+};
 
 const initHack = async (instanceAddress) => {
     const account = await getAccounts(0);

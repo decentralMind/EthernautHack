@@ -1,14 +1,16 @@
 const { web3 } = require('./getWeb3');
 const path = require('path');
+var fs = require('fs');
+var solc = require('solc');
 
 const compileContractCode = function (fileLocation, fileName, fileExtension) {
     const fileNameWithExtension = fileName + fileExtension;
     const filePath = path.join(fileLocation, fileNameWithExtension);
+    console.log('filepath', filePath);
     const input = {
         language: 'Solidity',
         sources: {
-            fileNameWithExtension : {
-                //This is bad way, change it.
+            [fileNameWithExtension] : {
                 content: fs.readFileSync(filePath, 'utf8')
             }
         },
@@ -22,44 +24,43 @@ const compileContractCode = function (fileLocation, fileName, fileExtension) {
     };
 
     const output = JSON.parse(solc.compile(JSON.stringify(input)));
-    const abi = output.contracts[fileNameWithExtension][fileName].abi;
     const compiledBytes = output.contracts[fileNameWithExtension][fileName].evm.bytecode.object;
+    const abi = output.contracts[fileNameWithExtension][fileName].abi;
 
     return {
         abi: abi,
         compiledBytes: compiledBytes
+    };
+};
+
+const deployContract = async function (account, fileLocation, fileName, fileExtension, arguments= '', value='') {
+    // const filePath = path.join(fileLocation, fileName);
+    const contractData = compileContractCode(fileLocation, fileName, fileExtension);
+    const myContract = new web3.eth.Contract(contractData.abi);
+    const currentGasPrice = await web3.eth.getGasPrice();
+
+    if(arguments) {
+      if(!Array.isArray(arguments)) {
+        throw new Error('Argumetns must be array type');
+      }
     }
-}
 
+    const deployData = await myContract.deploy({
+        arguments: arguments,
+        data: '0x' + contractData.compiledBytes
+    }).send({
+        from: account,
+        gas: 4000000,
+        gasPrice: currentGasPrice,
+        value: value
+    }).on('transactionHash', function (hash) {
+        console.log('hash', hash);
+    });
 
-
-// const deployToRopsten = async function (fileLocaton, fileName) {
-//     const contractData = compileContractCode(filePath);
-//     const myContract = new web3.eth.Contract(contractData.abi);
-//     const currentGasPrice = await web3.eth.getGasPrice();
-
-//     console.log('gas price', currentGasPrice);
-
-//     const estimatedGas = await web3.eth.estimateGas({ data: '0x' + contractData.compiledBytes });
-
-//     console.log('estimated gas', estimatedGas);
-
-//     const deployData = await myContract.deploy({
-//         data: '0x' + contractData.compiledBytes
-//     }).send({
-//         from: acc1,
-//         gas: estimatedGas + 100000,
-//         gasPrice: currentGasPrice,
-//     }).on('transactionHash', function (hash) {
-//         console.log('hash', hash);
-//     });
-
-//     return deployData;
-// }
-
-// deployToRopsten();
-
+    return deployData;
+};
 
 module.exports = {
-    compileContractCode: compileContractCode
-}
+    compileContractCode: compileContractCode,
+    deployContract: deployContract
+};
