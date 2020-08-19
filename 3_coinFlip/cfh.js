@@ -13,8 +13,13 @@ const {
   sendTransaction,
   valueFromLogs
 } = require('../utils/helpers');
+const {
+  deployContract
+} = require('../utils/deployContract');
 
-var globalValue = {};
+var globalValue = {
+  count: 0
+};
 
 const createInstance = async () => {
   console.log('Creating instance...');
@@ -29,12 +34,12 @@ const createInstance = async () => {
 
 const initHack = async (data) => {
   let currentBlock = await data.methods.getBlockMinusOne().call();
-  if (currentBlock != globalVariable.prevBlock) {
-    console.log(`New Block detected: ${currentBlock}, initiating flip_${globalVariable.count}.`);
-    globalVariable.prevBlock = currentBlock;
-    globalVariable.count++;
+  if (currentBlock != globalValue.prevBlock) {
+    console.log(`New Block detected: ${currentBlock}, initiating flip_${globalValue.count}.`);
+    globalValue.prevBlock = currentBlock;
+    globalValue.count++;
     return data.methods.checkBlock().send({
-      from: globalVariable.account,
+      from: globalValue.account,
       gas: 3000000
     });
   }
@@ -63,19 +68,16 @@ createInstance()
   })
   .then((data) => {
     const flip = setInterval(async () => {
-      if (globalVariable.count >= 12) {
+      if (globalValue.count >= 12) {
         const totalResult = await data.methods.getWins().call();
         console.log('totalResult', totalResult);
-        if (totalresult >= 10) {
+        if (totalResult >= 10) {
           clearInterval(flip);
-          return submitInstance(globalVariable.instanceAddress);
+          return submitInstance(globalValue.instanceAddress);
         }
-      } else {
-        initHack(data);
       }
+      initHack(data);
     }, 3000);
   })
-  .then((data) => {
-    console.log(data);
-  })
+  .then(console.log)
   .catch(console.log);

