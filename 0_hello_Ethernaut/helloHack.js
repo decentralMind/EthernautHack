@@ -59,6 +59,6 @@ createInstance()
     return submitInstance(globalValue.instanceAddress);
   })
   .then((data) => {
-    console.log(data);
+    console.log('Level0 HelloEthernaut hack success.');
   })
   .catch(console.log);

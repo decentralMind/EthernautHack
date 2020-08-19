@@ -53,6 +53,6 @@ createInstance()
     return submitInstance(globalValue.instanceAddress);
   })
   .then((data) => {
-    console.log(data);
+    console.log('Level2 Fallout Hack Success.');
   })
   .catch(console.log);

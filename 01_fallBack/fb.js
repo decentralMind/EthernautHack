@@ -91,5 +91,5 @@ createInstance()
   .then(() => {
     return submitInstance(globalValue.instanceAddress);
   })
-  .then(console.log)
+  .then(console.log('Level 1: FallBack Hack Success'))
   .catch(console.log);
