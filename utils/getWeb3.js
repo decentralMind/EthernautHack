@@ -18,4 +18,4 @@ const getWeb3 = () => {
 
 module.exports= {
   web3 : getWeb3()
-} 
+}
